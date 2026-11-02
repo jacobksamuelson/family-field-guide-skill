@@ -57,9 +57,9 @@ Install steps, in order. Stop and report if a step fails.
 
 ## Why one drawing per photo
 
-![A one-shot AI poster with an invented baseball and football circled, next to the faithful poster made one drawing per photo.](docs/one-prompt-vs-per-photo.jpg)
+![A one-shot AI poster with the swapped-in ball and the added football circled, next to the faithful poster made one drawing per photo.](docs/one-prompt-vs-per-photo.jpg)
 
-Asking for the whole poster in one prompt looked great and made things up: a baseball and a football the family doesn't own. So the skill draws each object from its own photo, then has your assistant check every drawing against that photo and redraw the misses. Code typesets the words.
+Asking for the whole poster in one prompt looked great and made things up: it swapped the family's bat and glove for a ball, and added a football that's in none of their photos. So the skill draws each object from its own photo, then has your assistant check every drawing against that photo and redraw the misses. Code typesets the words.
 
 ## How it works
 
