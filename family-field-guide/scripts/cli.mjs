@@ -95,6 +95,35 @@ async function readImageFile(file) {
   return buf;
 }
 
+// Paints over parts of a photo (boxes in fractions of the whole photo, like crop) with
+// each box's own average colour, so a phone number or address on a sticker never
+// reaches Gemini or the poster. Returns the image unchanged when there's nothing to hide.
+function withHidden(img, hide) {
+  if (!Array.isArray(hide) || !hide.length) return img;
+  const c = createCanvas(img.width, img.height);
+  const g = c.getContext('2d');
+  g.drawImage(img, 0, 0);
+  for (const h of hide) {
+    const x = Math.max(0, Math.round(h.x * img.width));
+    const y = Math.max(0, Math.round(h.y * img.height));
+    const w = Math.max(1, Math.min(img.width - x, Math.round(h.w * img.width)));
+    const hh = Math.max(1, Math.min(img.height - y, Math.round(h.h * img.height)));
+    const d = g.getImageData(x, y, w, hh).data;
+    let r = 0;
+    let gr = 0;
+    let b = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      r += d[i];
+      gr += d[i + 1];
+      b += d[i + 2];
+    }
+    const n = d.length / 4;
+    g.fillStyle = `rgb(${Math.round(r / n)}, ${Math.round(gr / n)}, ${Math.round(b / n)})`;
+    g.fillRect(x, y, w, hh);
+  }
+  return c;
+}
+
 async function jpegOf(img, maxEdge, quality, crop = FULL_CROP) {
   const { sx, sy, sw, sh } = cropRect(img, crop);
   const r = Math.min(1, maxEdge / Math.max(sw, sh));
@@ -225,7 +254,7 @@ async function draw(specPath, flags) {
   log(`Drawing ${targets.length} item${targets.length === 1 ? '' : 's'}, ${concurrency} at a time (about 20–45 s each)…`);
 
   const drawOne = async ({ it, n }) => {
-    const img = await loadImage(await readFile(inDir(spec, it.photo)));
+    const img = withHidden(await loadImage(await readFile(inDir(spec, it.photo))), it.hide);
     const crop = it.crop || FULL_CROP;
     const photo = await jpegOf(img, 1536, 0.9, crop);
     const { sw, sh } = cropRect(img, crop);
@@ -306,7 +335,7 @@ async function review(specPath) {
       g.drawImage(img, sx, sy, sw, sh, bx + (boxW - w) / 2, y + (boxH - h) / 2, w, h);
     };
     if (it.photo) {
-      const img = await loadImage(await readFile(inDir(spec, it.photo)));
+      const img = withHidden(await loadImage(await readFile(inDir(spec, it.photo))), it.hide);
       const { sx, sy, sw, sh } = cropRect(img, it.crop || FULL_CROP);
       fit(img, x, sx, sy, sw, sh);
     }
@@ -355,7 +384,7 @@ async function render(specPath, flags) {
 
   const assets = await Promise.all(
     spec.items.map(async (it) => ({
-      photo: it.photo && existsSync(inDir(spec, it.photo)) ? await loadImage(await readFile(inDir(spec, it.photo))) : null,
+      photo: it.photo && existsSync(inDir(spec, it.photo)) ? withHidden(await loadImage(await readFile(inDir(spec, it.photo))), it.hide) : null,
       art: illustrated && it.art && existsSync(inDir(spec, it.art)) ? processArt(await loadImage(await readFile(inDir(spec, it.art)))) : null,
       toned: null,
     })),

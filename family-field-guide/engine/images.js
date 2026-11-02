@@ -134,21 +134,29 @@ export function processArt(bmp) {
   const d = img.data;
 
   // Background colour = median of the border pixels.
-  const border = [];
   const stepX = Math.max(1, Math.floor(W / 200));
   const stepY = Math.max(1, Math.floor(H / 200));
-  for (let x = 0; x < W; x += stepX) border.push((0 * W + x) * 4, ((H - 1) * W + x) * 4);
-  for (let y = 0; y < H; y += stepY) border.push((y * W + 0) * 4, (y * W + W - 1) * 4);
+  const edges = { top: [], bottom: [], left: [], right: [] };
+  for (let x = 0; x < W; x += stepX) {
+    edges.top.push(x * 4);
+    edges.bottom.push(((H - 1) * W + x) * 4);
+  }
+  for (let y = 0; y < H; y += stepY) {
+    edges.left.push(y * W * 4);
+    edges.right.push((y * W + W - 1) * 4);
+  }
+  const border = Object.values(edges).flat();
   const med = [0, 1, 2].map((k) => {
     const v = border.map((i) => d[i + k]).sort((a, b) => a - b);
     return v[Math.floor(v.length / 2)];
   });
   const light = Math.min(...med) > 185;
-  // Did the model actually leave a plain background? Share of border samples that
-  // come out near-white once levelled.
+  // Did the model actually leave a plain background? Share of samples that come out
+  // near-white once levelled, checked per edge so a floor strip along one side
+  // (common when the photo had a floor) is caught too.
   const lev = light ? med.map((v) => 255 / Math.max(v, 1)) : [1, 1, 1];
-  const clean = border.filter((i) => Math.min(d[i] * lev[0], d[i + 1] * lev[1], d[i + 2] * lev[2]) > 218).length;
-  const backgroundClean = clean / border.length > 0.6;
+  const cleanShare = (list) => list.filter((i) => Math.min(d[i] * lev[0], d[i + 1] * lev[1], d[i + 2] * lev[2]) > 218).length / list.length;
+  const backgroundClean = cleanShare(border) > 0.6 && Object.values(edges).every((list) => cleanShare(list) > 0.6);
 
   // Levels: divide by the background colour so it maps to white. Then fade the
   // outer margin to white, so a floor wash or an object that runs off the edge

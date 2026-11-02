@@ -13,6 +13,7 @@ export function buildPrompt(item) {
     '- Do not add, swap, remove or "improve" anything. Do not invent other gear, brands or text that are not visible in the photo.',
     '- Leave out everything that is not the object(s): hands, arms, people, floors, walls, furniture, hooks, clutter and room shadows.',
     '- Where a hand or something else hides part of an object, complete that part plainly and believably.',
+    '- Never copy phone numbers, email addresses or street addresses from labels or stickers: leave those lines blank. Names, logos and other lettering can stay.',
     '- If the subject is a whole scene (for example a packed car trunk or a pantry shelf), keep that scene as the specimen but drop its surroundings.',
     '',
     'Composition: the object(s) whole and centered, laid out as a calm study the way a naturalist would arrange them. Leave clear white space on every side: no part may touch or cross the edge of the image.',
