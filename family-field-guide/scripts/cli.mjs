@@ -196,6 +196,10 @@ async function draw(specPath, flags) {
   const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
   if (!key) die('Set GEMINI_API_KEY (free to create at https://aistudio.google.com/apikey, drawings bill about $0.14 each), or set "style": "photo" in poster.json for a free photo poster.');
   const only = flags.only ? String(flags.only).split(',').map((s) => parseInt(s, 10)).filter(Boolean) : null;
+  const missingItems = (only || []).filter((n) => n < 1 || n > spec.items.length);
+  if (flags.only && (!only.length || missingItems.length)) {
+    die(`No item ${missingItems.join(', ') || flags.only}. This poster has ${spec.items.length} item${spec.items.length === 1 ? '' : 's'}, numbered 1 to ${spec.items.length}.`);
+  }
   const targets = spec.items
     .map((it, i) => ({ it, n: i + 1 }))
     .filter(({ it, n }) => it.photo && (only ? only.includes(n) : flags.all || !it.art));
