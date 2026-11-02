@@ -5,15 +5,14 @@ description: Turn photos of a family's everyday things (sports gear, kitchen too
 
 # Family Field Guide
 
-Make a vintage field-guide poster from a family's photos. You (Claude) look at each photo and write the name, caption and drawing notes. Gemini draws each object from its photo. A script lays out the poster and writes the print files, with all text typeset exactly as written.
+Make a vintage field-guide poster from a family's photos. You look at each photo and write the name, caption and drawing notes. This works the same in Claude Code and Codex. Gemini draws each object from its photo. A script lays out the poster and writes the print files, with all text typeset exactly as written.
 
 Scripts live in this skill folder. Run them with absolute paths. `SKILL_DIR` below means the folder holding this file.
 
 ## Before you start
 
-1. **Node 18 or newer** (`node --version`).
-2. **One-time install** if `SKILL_DIR/node_modules` is missing: `npm install --prefix SKILL_DIR` (about 15 MB, prebuilt, nothing to compile).
-3. **For drawings: `GEMINI_API_KEY`** in the environment. A key is free to create at https://aistudio.google.com/apikey. Drawings bill to that Google account at about **$0.14 per object**, so about $1.90 for 14. Without a key, offer the free **photo style**: the person's photos, toned like old prints, with no network calls at all.
+1. **Node 18 or newer** (`node --version`). The first run of the script installs its one package into the skill folder by itself (about 15 MB, prebuilt, nothing to compile). If that fails, run `npm install --prefix SKILL_DIR`.
+2. **For drawings: `GEMINI_API_KEY`** in the environment. A key is free to create at https://aistudio.google.com/apikey. Drawings bill to that Google account at about **$0.14 per object**, so about $1.90 for 14. Without a key, offer the free **photo style**: the person's photos, toned like old prints, with no network calls at all.
 
 ## Workflow
 
@@ -31,7 +30,7 @@ This writes `<work dir>/poster.json`, upright copies of the photos, and small pr
 
 ### 3. Write the words (your job)
 
-Look at every preview with the Read tool. Then edit `poster.json`, filling in each item's `name`, `caption` and `notes`, plus the poster's `title`, `subtitle` and `about`.
+Open every preview image so you can see it (Claude Code: the Read tool; Codex: view the image). Then edit `poster.json`, filling in each item's `name`, `caption` and `notes`, plus the poster's `title`, `subtitle` and `about`.
 
 - **name**: what it is, in 1 to 3 plain words a family would use, Title Case ("Cleats", "Water Bottles", "The Full Trunk"). No brand names, no people's names.
 - **caption**: one short line, 3 to 8 words, in the family's voice. Dry, warm or funny, never corny. No emoji, no hashtags, no full stop. ("Get muddy, always misplaced", "We have 100", "Never the matching lid"). Use names and facts only from what they told you. Never invent a name or a fact.
