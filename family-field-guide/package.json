@@ -1,0 +1,10 @@
+{
+  "name": "family-field-guide-skill",
+  "private": true,
+  "type": "module",
+  "description": "Scripts for the family-field-guide Claude skill: prepare photos, draw with Gemini, render the poster.",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "@napi-rs/canvas": "1.0.11"
+  }
+}
