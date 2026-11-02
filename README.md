@@ -65,6 +65,8 @@ Asking for the whole poster in one prompt looked great and made things up: it sw
 
 `family-field-guide/scripts/ffg.mjs` has four steps: `prepare` (upright copies and previews of the photos), `draw` (Gemini, three at a time, and it won't spend without `--yes`), `review` (a photo → drawing check sheet), and `render` (preview, then the final PNG and PDF). The poster engine in `family-field-guide/engine/` is shared with the Family Field Guide web app, so both make the same posters. Fonts are Libre Caslon Text under the SIL Open Font License. You can also unzip `dist/family-field-guide.zip` into your skills folder instead of using the installer.
 
+**Tests and evals:** `node evals/tests.mjs` checks the scripts in about 3 seconds. `node evals/run.mjs` has a fresh Claude use the skill for a pretend user and grades it, with a fake Gemini so drawings cost nothing. See [evals/README.md](evals/README.md).
+
 Only `draw` uses the network. It sends each cropped photo to Google's Gemini API with your key. Everything else stays on your machine.
 
 Maintainer: Jacob Samuelson.
