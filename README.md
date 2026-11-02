@@ -6,6 +6,14 @@ A skill for Claude Code and Codex that turns photos of your family's everyday th
 
 It shows you the captions to edit before drawing, quotes the cost before spending anything, and checks every drawing against its photo, redrawing any that changed the object. All poster text is typeset by a script, so spelling is always exact.
 
+## The inspiration
+
+It started with two old posters: a chart of numbered cheeses and a plate of hand-coloured mushrooms, each with tiny labels on aged paper. I wanted one for the things in our house.
+
+![The vintage "La Fromagerie" and "Fungi · Champignons" prints next to our Youth Sports poster.](docs/inspiration.jpg)
+
+*The "La Fromagerie" and "Fungi · Champignons" prints are shown for reference only. They belong to their makers and aren't part of this project.*
+
 ![Three phone photos (water bottles, a lacrosse stick, rolled socks), each next to the engraving-style drawing made from it.](docs/photos-to-drawings.jpg)
 
 ## Install
